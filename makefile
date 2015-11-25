@@ -1,5 +1,5 @@
 ####################################################
-#  Make File for Printer_SRC system		   #
+#  Make File for Printer_SRC and IpGet system      #
 #						   #
 #						   #
 #						   #
@@ -16,6 +16,8 @@ SOURCE=$(wildcard src/*.cpp)
 #INCLUDES =$(wildcard *.h)
 MAIN=ipget
 
+#Store if user is root info
+IS_ROOT=$(shell whoami)
 
 .PHONY: clean
 
@@ -33,8 +35,12 @@ static: $(SOURCE)
 	
 	
 install:
-	sudo /usr/bin/install -c -m 755  $(MAIN) /usr/bin; 
 
+	if [ "$(shell whoami)" = "root" ]; then \
+		install -c -m 755  $(MAIN) /usr/bin; \
+	else \
+		sudo /usr/bin/install -c -m 755  $(MAIN) /usr/bin; \
+	fi;
 
 clean:
 	rm -f $(MAIN) *.o
