@@ -6,7 +6,7 @@
 #						   # 
 ####################################################
 
-#Chose Compiler 
+#Chose Compiler
 CXX=g++
 
 CFLAGS=-g -std=c++11 -Wreturn-local-addr
