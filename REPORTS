@@ -1,0 +1,61 @@
+####################################################
+#						   #
+#	IPGET - Mainstream Software and IT.	   #
+#						   #	
+####################################################
+
+This is a file Reports for bugs and other stuffs, Please insert bug track code and the error with it.
+
+Sample for bugs
+------------------------------------------------------------------------------
+Bug track code: <XXXXX>
+
+Bug Status: <SOLVED><WORKING><SUSPENDED><DISCOVERED>
+
+Date: <date>
+
+Name of person: <person>
+
+Bug Name : <name> 
+
+Bug Description:
+<Big descripiton goes here>
+
+Bug final declaration: <when fix bugs, description about it goes here> < or write NOT READY>
+
+-------------------------------------------------------------------------------
+
+#####################################################################################################
+#											            #
+#				BUGS REPORTS							    #
+#												    #
+#####################################################################################################
+
+Bug track code: 0001
+Bug Status: WORKING
+Date: 10/05/2015
+Name of person: Jefferson
+Bug Name : Segment Fault libstdcxx.
+Bug Description: 
+Error in get ifa address.
+A bug occured with lib "libstdcxx" 
+Starting program: /home/printer/ipget-0.1.0/ipget
+Traceback (most recent call last):
+  File "/usr/share/gdb/auto-load/usr/lib/x86_64-linux-gnu/libstdc++.so.6.0.19-gdb.py", line 63, in <module>
+    from libstdcxx.v6.printers import register_libstdcxx_printers
+ImportError: No module named 'libstdcxx'
+DEBUG ON
+Debug info:
+MemoryAddr of ifAddrStruct:
+
+Program received signal SIGSEGV, Segmentation fault.
+0x0000000000401789 in GetIP::GetInternalIP (this=0x604010, InterfaceName=0x402322 "eth0") at src/printer.cpp:36
+36              if (ifa->ifa_addr->sa_family == AF_INET)
+
+Bug final declaration: 
+Fixed with put a verificacion, for a null addr param.
+Solved with this declarataion
+
+if (ifa->ifa_addr == NULL) { cout << "Interface " << ifa->ifa_name << " with no ip address value. " << endl; continue; }
+--------------------------------------------------------------------------------------------------------------------------------------------------
+

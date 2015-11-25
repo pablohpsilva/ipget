@@ -1,0 +1,18 @@
+########################################################################
+#
+# Printer SCS - IPGET
+#
+# All contents and this program are under GNU license
+#
+########################################################################
+
+
+Version 0.0.13
+Fixed segment fault in linux machines.
+Formated some text to better view.
+
+
+Version 0.0.12
+Fixed external ip value not returning correcly.
+Fixed various bugs.
+Implemented Regex with C++11 Flag.
