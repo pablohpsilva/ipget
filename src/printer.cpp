@@ -121,14 +121,15 @@ void GetIP::GetExternalIP()
 	//Copy midle buffer in index
 	copy(recvBuffer + 210, recvBuffer + 228, end);
 	//format string
-	end[18] = '\0';
+	end[17] = '\0';
+	
 	//take out first poss
-	copy (end + 2 , end + 18 , _retval);
-	for (int i = 20; i < sizeof(_retval); i--)
+	copy (end + 2 , end + 17 , _retval);
+	for (int i = 18; i < sizeof(_retval); i--)
 	{
 		_retval [i] = '\0';
 	}
-	cout << "EXTERNAL_IP = " << _retval;
+	cout << "EXTERNAL_IP = " << _retval << endl;
     }
     catch(int e)
     {
