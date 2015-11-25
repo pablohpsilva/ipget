@@ -1,0 +1,13 @@
+#
+#	Ip catcher wrapper
+#
+
+
+To compile program default type:
+make
+
+To install type:
+make install
+
+Search deps:
+make configure
