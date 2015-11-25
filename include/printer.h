@@ -95,7 +95,6 @@ class PortCheck
 {
   public:
 
-      bool CheckPort(char* host, short int port);
-      
+      bool CheckPort(char* host, int port);
     
 };

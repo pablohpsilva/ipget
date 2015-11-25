@@ -207,8 +207,9 @@ void GetIP::GetExternalIpByDns ()
 *
 *************************************************/
 
-PortCheck::CheckPort(char* host, short int port)
+bool PortCheck::CheckPort(char* host, int port)
 {
    cout << "Trying to connect to port " << port;
+	return true;
    
 }
