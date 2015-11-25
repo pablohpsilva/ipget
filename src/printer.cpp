@@ -119,7 +119,7 @@ void GetIP::GetExternalIP()
 	char end[250]; 
 	char _retval[18];
 	//Copy midle buffer in index
-	copy(recvBuffer + 210, recvBuffer + 226, end);
+	copy(recvBuffer + 210, recvBuffer + 228, end);
 	//format string
 	end[18] = '\0';
 	//take out first poss
