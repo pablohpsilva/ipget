@@ -1,6 +1,6 @@
 #include "../include/printer.h"
 
-#define __PROGRAM__VERSION "This program was made by Mainstream IT and Software enginier.\nAnd is under GNU license.\nVersion = 0.0.12\n"
+#define __PROGRAM__VERSION "This program was made by Mainstream IT and Software enginier.\nAnd is under GNU license.\nVersion = 1.0.0\n"
 
 int main (int argc, char* argv[])
 {
