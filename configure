@@ -59,3 +59,11 @@ else
       FAIL_OUT;
 
 fi;
+
+printf "pthread.h"
+if [ -f "/usr/include/pthread.h" ]; then
+	sleep 1
+	OK_OUT;
+else
+	FAIL_OUT
+fi;
