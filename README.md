@@ -12,5 +12,5 @@ To install type:
 make install
 
 Search deps:
-make configure
+make config
 
