@@ -211,6 +211,39 @@ void GetIP::GetExternalIpByDns ()
 bool PortCheck::CheckPort(char* host, int port)
 {
    cout << "Trying to connect to port " << port;
-	return true;
+   
+   //Try create a sock stream to get pass tru selected port, init a buffer;
+    char* buffer; 
+    buffer = new char[1024];	
+    sockd = socket (PF_INET, SOCK_STREAM, IPPROTO_TCP);
+    // Error handling
+    if( sockd > 0 )
+    {
+	cout << "Error o opening sock.\nError description: " << endl; 
+	exit (EXIT_FAILURE);
+    }
+    //Allocate sockt addr for handling
+    memset(&servAddr, 0, sizeof(servAddr));
+    servAddr.sin_family = AF_INET;
+    servAddr.sin_addr.s_addr = INADDR_ANY;
+    servAddr.sin_port = htons(port);
+    
+    // try connect with socket adn srvAdd struct
+    if (bind(sockd, (const sockaddr*) &servAddr, sizeof(servAddr)) < 0)
+    {
+      if(errno == EADDRINUSE)
+      {
+	cout << "Port is already used, please try run ps aux | grep <port> to get more details";
+	exit(EXIT_FAILURE);
+      }
+      else
+      {
+	 printf("could not bind to process (%d) %s\n", errno, strerror(errno));
+         return false;
+      }
+      
+      cout << "Port "<< port << "opened";
+    }
+    
    
 }

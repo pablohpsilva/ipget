@@ -4,8 +4,9 @@
 
 int main (int argc, char* argv[])
 {
-	
+	//Intanciate classes
 	GetIP* ip = new GetIP();
+	PortCheck *p_check = new PortCheck();
 	
 	
 //Args Opts
@@ -39,6 +40,7 @@ int main (int argc, char* argv[])
 	if(ip != NULL)
 	{
 		delete ip;	
+		delete p_check;
 	}		
 
 	return 0;
