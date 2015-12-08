@@ -26,6 +26,8 @@ function FAIL_OUT ()
 	printf "%10s %b[ FAIL ] %b \n" "" "$RED" "$CLEAR ";
 }
 
+
+
 printf "Configuring for compilation...\n"
 printf "Detecting libs:\n";
 
@@ -62,6 +64,14 @@ fi;
 
 printf "pthread.h"
 if [ -f "/usr/include/pthread.h" ]; then
+	sleep 1
+	OK_OUT;
+else
+	FAIL_OUT
+fi;
+
+printf "gl.h"
+if [ -f "/usr/include/gl.h" ]; then 
 	sleep 1
 	OK_OUT;
 else
