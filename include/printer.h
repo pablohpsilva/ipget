@@ -1,5 +1,5 @@
 #include <iostream>
-
+#include <stdlib.h>  //for atoi
 
 #include <sys/types.h>
 #include <sys/socket.h>
