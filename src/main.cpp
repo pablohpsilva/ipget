@@ -32,7 +32,16 @@ int main (int argc, char* argv[])
 		        std::cout << __PROGRAM__VERSION << std::endl;
 			return 0;
 
-		}	
+		}
+		
+		if( std::string(argv[i]) == "-h") 
+		{
+		  char* host = argv[i+1];
+		  int port = std::stoi( argv[i+2]);
+		  p_check->CheckPort(host, port);
+		  return 0;
+		}
+		    
 	
 	}
 	ip->GetInternalIP("eth0");
