@@ -71,7 +71,7 @@ else
 fi;
 
 printf "gl.h"
-if [ -f "/usr/include/gl.h" ]; then 
+if [ -f "/usr/include/GL/gl.h" ]; then 
 	sleep 1
 	OK_OUT;
 else
