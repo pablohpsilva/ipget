@@ -105,8 +105,8 @@ void GetIP::GetExternalIP()
 	//Get Connect sock
 	int retval = connect(sockd, (struct sockaddr *) &servAddr, sizeof(servAddr));
 	//Verify if connect has sucesffulll
-	if( retval < 0 ) { throw; }
-	//Calculate size of request
+	if( retval < 0 ) { cout<<"Error while trying connect thought socket";  throw; }
+	//Calculate s/ize of request
 	requestLen = strlen(request);
 	//Send pacted
 	int retval_send = send(sockd,request, requestLen, 0);
@@ -116,12 +116,12 @@ void GetIP::GetExternalIP()
 	bytesRcvd = recv(sockd, recvBuffer, 256 -1, 0);
         recvBuffer[bytesRcvd] = '\0';
 	//formate output
-	char end[250]; 
+	char end[250];
 	char _retval[18];
 	//Copy midle buffer in index
 	copy(recvBuffer + 210, recvBuffer + 228, end);
 	//format string
-	end[17] = '\0';
+	end[16] = '\0';
 	
 	//take out first poss
 	copy (end + 2 , end + 17 , _retval);
