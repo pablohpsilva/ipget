@@ -4,6 +4,7 @@
 #include <stdlib.h>
 #include <exception>
 #include <errno.h>
+#include <regex.h>
 
 using namespace std;
 
@@ -113,10 +114,41 @@ void GetIP::GetExternalIP()
 	//Verify if package has data	
 	if ( retval_send != requestLen) { throw; }
 	//Calculate data
-	bytesRcvd = recv(sockd, recvBuffer, 256 -1, 0);
+	bytesRcvd = recv(sockd, recvBuffer, sizeof(recvBuffer) -1 , 0);
         recvBuffer[bytesRcvd] = '\0';
+	// has C++ so regex on it
+//#if __cplusplus != 201103L
+	//Instantiate string with recvBuffer char to string conversion
+	string buffer(recvBuffer);
+	//Create regex object
+	regex ip("\\d{1,3}\\.\\d{1,3}\\.\\d{1,3}\\.\\d{1,3}");
+
+	//Create regex match
+	std::smatch sm;
+	//see if the resuls is valid
+	regex_search (buffer, sm, ip , std::regex_constants::match_default );
+
+#if DEBUG
+        cout << "debug info : " << buffer<<endl;
+	cout << "string literal with" << sm.size() << " matches" << endl;
+	std::cout << "the matches were: ";
+	for (unsigned i=0; i<sm.size(); ++i)
+	{
+	    std::cout << "[" << sm.str(i) << "] ";
+	}
+#endif
+	//Forloop auto iterator with initialization list
+	for (auto& x : sm)
+	{
+	   cout << "EXTERNAL_IP = " << x ;
+	}
+
+//#endif
+
+//Set this fucntion to C++11 lower
+#if __cplusplus < 201103L
 	//formate output
-	char end[250]; 
+	char end[250];
 	char _retval[18];
 	//Copy midle buffer in index
 	copy(recvBuffer + 210, recvBuffer + 228, end);
@@ -130,6 +162,8 @@ void GetIP::GetExternalIP()
 		_retval [i] = '\0';
 	}
 	cout << "EXTERNAL_IP = " << _retval << endl;
+#endif
+
     }
     catch(int e)
     {
