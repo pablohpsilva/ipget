@@ -1,5 +1,5 @@
 #include <iostream>
-
+#include <stdlib.h>  //for atoi
 
 #include <sys/types.h>
 #include <sys/socket.h>
@@ -68,7 +68,7 @@ class GetIP
 
        
 
-private:
+
 	//static void* Thread_Wrapper(void*);
 
 	/* Variables */
@@ -91,10 +91,11 @@ private:
 
 };
 
-class PortCheck
+class PortCheck : GetIP
 {
   public:
 
       bool CheckPort(char* host, int port);
+      
     
 };
