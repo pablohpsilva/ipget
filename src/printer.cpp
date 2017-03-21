@@ -71,7 +71,9 @@ void GetIP::GetInternalIP(char* InterfaceName)
 void GetIP::GetExternalIP()
 {
 
+#if DEBUG
     cout << "Receiving Data...."<<endl;
+#endif
     //init conn
     servIP = "78.47.139.102"; //External IP server addr
     servPort = 80; //port (html)
@@ -140,7 +142,7 @@ void GetIP::GetExternalIP()
 	//Forloop auto iterator with initialization list
 	for (auto& x : sm)
 	{
-	   cout << "EXTERNAL_IP = " << x ;
+	   cout << "EXTERNAL_IP = " << x << endl;
 	}
 
 //#endif
