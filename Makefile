@@ -13,7 +13,7 @@ CFLAGS=-g -std=c++11 -Wreturn-local-addr
 #CFLAGS=-g -Wreturn-local-addr
 LDFLAGS=-L 
 SOURCE=$(wildcard src/*.cpp)
-#INCLUDES =$(wildcard *.h)
+INCLUDES =$(wildcard include/*.h)
 MAIN=ipget
 
 #Store if user is root info

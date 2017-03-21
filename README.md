@@ -14,3 +14,7 @@ make install
 Search deps:
 make config
 
+<p><b>Bug Report<p></b>
+
+If you found any bug or error while using it, please record in http://mainstreamit.ddns.net/bugzilla. Thankyou.
+

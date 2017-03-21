@@ -4,6 +4,7 @@
 #include <stdlib.h>
 #include <exception>
 #include <errno.h>
+#include <regex.h>
 
 using namespace std;
 
@@ -113,8 +114,39 @@ void GetIP::GetExternalIP()
 	//Verify if package has data	
 	if ( retval_send != requestLen) { throw; }
 	//Calculate data
-	bytesRcvd = recv(sockd, recvBuffer, 256 -1, 0);
+	bytesRcvd = recv(sockd, recvBuffer, sizeof(recvBuffer) -1 , 0);
         recvBuffer[bytesRcvd] = '\0';
+	// has C++ so regex on it
+//#if __cplusplus != 201103L
+	//Instantiate string with recvBuffer char to string conversion
+	string buffer(recvBuffer);
+	//Create regex object
+	regex ip("\\d{1,3}\\.\\d{1,3}\\.\\d{1,3}\\.\\d{1,3}");
+
+	//Create regex match
+	std::smatch sm;
+	//see if the resuls is valid
+	regex_search (buffer, sm, ip , std::regex_constants::match_default );
+
+#if DEBUG
+        cout << "debug info : " << buffer<<endl;
+	cout << "string literal with" << sm.size() << " matches" << endl;
+	std::cout << "the matches were: ";
+	for (unsigned i=0; i<sm.size(); ++i)
+	{
+	    std::cout << "[" << sm.str(i) << "] ";
+	}
+#endif
+	//Forloop auto iterator with initialization list
+	for (auto& x : sm)
+	{
+	   cout << "EXTERNAL_IP = " << x ;
+	}
+
+//#endif
+
+//Set this fucntion to C++11 lower
+#if __cplusplus < 201103L
 	//formate output
 	char end[250];
 	char _retval[18];
@@ -130,6 +162,8 @@ void GetIP::GetExternalIP()
 		_retval [i] = '\0';
 	}
 	cout << "EXTERNAL_IP = " << _retval << endl;
+#endif
+
     }
     catch(int e)
     {
@@ -210,7 +244,40 @@ void GetIP::GetExternalIpByDns ()
 
 bool PortCheck::CheckPort(char* host, int port)
 {
-   cout << "Trying to connect to port " << port;
-	return true;
+   cout << "Trying to connect to host " << host << " with port: "<< port << endl;
+   
+   //Try create a sock stream to get pass tru selected port, init a buffer;
+    char* buffer; 
+    buffer = new char[1024];	
+    sockd = socket (PF_INET, SOCK_STREAM, IPPROTO_TCP);
+    // Error handling
+    if( sockd < 0 )
+    {
+	cout << "Error o opening sock.\nError description: " << strerror(errno) << endl; 
+	exit (EXIT_FAILURE);
+    }
+    //Allocate sockt addr for handling
+    memset(&servAddr, 0, sizeof(servAddr));
+    servAddr.sin_family = AF_INET;
+    servAddr.sin_addr.s_addr = inet_addr(host);; //for any ip address
+    servAddr.sin_port = htons(port);
+    
+    // try connect with socket adn srvAdd struct
+    if (connect(sockd, (const sockaddr*) &servAddr, sizeof(servAddr)) < 0)
+    {
+      if(errno == EADDRINUSE) //Treate error with errno
+      {
+	cout << "Port is already used, please try run ps aux | grep <port> to get more details";
+	exit(EXIT_FAILURE);
+      }
+      else
+      {
+	 printf("could not bind to process (%d) %s\n", errno, strerror(errno));
+         return false;
+      }  
+    }
+    
+    cout << "Port "<< port << " opened" << endl;
+    return true;
    
 }
