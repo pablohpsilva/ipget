@@ -33,18 +33,18 @@ printf "ifaddrs: "
 
 if [ -f "/usr/include/ifaddrs.h" ]; then 
 #DEPRECIETED -> printf "%10s %s [ OK  ] %s \n" "$GREEN" "$CLEAR";
-	sleep 1
+#	sleep 1
 	OK_OUT;
 
 else
 #DEPRECIETED -> printf "%b[ !!! FAIL !!! ] %b \n" "$RED" "$CLEAR ";
 	FAIL_OUT;
-	
+
 fi;
 
 printf "if.h: "
 if [ -f "/usr/include/net/if.h" ]; then
-       sleep 1
+#       sleep 1
        OK_OUT;
 else
       FAIL_OUT;
@@ -53,7 +53,7 @@ fi;
 
 printf "inet.h: "
 if [ -f "/usr/include/arpa/inet.h" ]; then
-       sleep 1
+#       sleep 1
        OK_OUT;
 else
       FAIL_OUT;
@@ -62,8 +62,18 @@ fi;
 
 printf "pthread.h"
 if [ -f "/usr/include/pthread.h" ]; then
-	sleep 1
+#	sleep 1
 	OK_OUT;
 else
 	FAIL_OUT
 fi;
+
+printf "regex.h"
+if [ -f "/usr/include/regex.h" ]; then
+#	sleep 1
+	OK_OUT;
+else
+	FAIL_OUT
+fi;
+
+printf "All depedencies are solved, please do a [%s%bmake%b] to compile the program.\n" "" "$GREEN" "$CLEAR";
