@@ -1,4 +1,5 @@
 #!/bin/bash
+VERSION_SYSTEM=`uname -s`
 
 OUT_C='-e'
 #ECHO COLORS
@@ -72,3 +73,11 @@ if [ -f "/usr/include/GL/gl.h" ]; then
 else
 	FAIL_OUT
 fi;
+
+echo "Detecting distro: \r";
+
+if [ $VERSION_SYSTEM == "FreeBSD" ]; then
+echo "     FreeBSD Detected switch compiler"
+	sed -ie 's/g\+\+/clang++/g'
+fi;
+
