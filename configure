@@ -26,8 +26,6 @@ function FAIL_OUT ()
 	printf "%10s %b[ FAIL ] %b \n" "" "$RED" "$CLEAR ";
 }
 
-
-
 printf "Configuring for compilation...\n"
 printf "Detecting libs:\n";
 
@@ -35,10 +33,7 @@ printf "ifaddrs: "
 
 if [ -f "/usr/include/ifaddrs.h" ]; then 
 #DEPRECIETED -> printf "%10s %s [ OK  ] %s \n" "$GREEN" "$CLEAR";
-<<<<<<< HEAD
 #	sleep 1
-=======
->>>>>>> 490b2cc7f58e250be11ad0672541c4fb2f576652
 	OK_OUT;
 
 else
@@ -49,45 +44,36 @@ fi;
 
 printf "if.h: "
 if [ -f "/usr/include/net/if.h" ]; then
-<<<<<<< HEAD
 #       sleep 1
-=======
->>>>>>> 490b2cc7f58e250be11ad0672541c4fb2f576652
        OK_OUT;
 else
-      FAIL_OUT;
+       FAIL_OUT;
 
 fi;
 
 printf "inet.h: "
 if [ -f "/usr/include/arpa/inet.h" ]; then
-<<<<<<< HEAD
 #       sleep 1
-=======
->>>>>>> 490b2cc7f58e250be11ad0672541c4fb2f576652
        OK_OUT;
 else
-      FAIL_OUT;
+       FAIL_OUT;
 
 fi;
 
 printf "pthread.h"
 if [ -f "/usr/include/pthread.h" ]; then
-<<<<<<< HEAD
 #	sleep 1
-=======
 	OK_OUT;
 else
 	FAIL_OUT
 fi;
 
-printf "gl.h"
-if [ -f "/usr/include/GL/gl.h" ]; then 
->>>>>>> 490b2cc7f58e250be11ad0672541c4fb2f576652
-	OK_OUT;
-else
-	FAIL_OUT
-fi;
+#printf "gl.h"
+#if [ -f "/usr/include/GL/gl.h" ]; then 
+#	OK_OUT;
+#else
+#	FAIL_OUT
+#fi;
 
 printf "regex.h"
 if [ -f "/usr/include/regex.h" ]; then

@@ -45,7 +45,7 @@ install:
 clean:
 	rm -f $(MAIN) *.o
 
-config:
+configure:
 	@echo Searching Dependences unsolved... 
 	@./configure
 	
