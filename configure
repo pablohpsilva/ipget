@@ -15,6 +15,17 @@ GREEN="\x1b[32m"
 BLUE="\x1b[34m"
 CLEAR='\x1b[0m'
 
+trap err_out ERR;
+
+
+#Function to get error handling
+function err_out()
+{
+	errorcode = $?;
+	printf "script return error code %d " "$errorcode";
+}
+
+
 #Formated outputs 
 function OK_OUT ()
 {
@@ -26,9 +37,33 @@ function FAIL_OUT ()
 	printf "%10s %b[ FAIL ] %b \n" "" "$RED" "$CLEAR ";
 }
 
+#Function to detect OS type and install depencies for it
+function os_detect ()
+{
+	os_type=`cat /etc/os-release | grep ID | cut -d'=' -f2`;
+        if [ "$os_type" == "gentoo" ]; then
+		printf "Its seem ur system dont have %s instaled, do you wanna install for you?[Yes/No]" "$1";
+	        read answer;
+		if [ "$answer" == "yes" ]; then
+	                emerge -v $1;
+			#exit if emerge has failed
+			if [ "$?" -gt "0" ]; then
+				exit 1;
+			else
+				printf "the %d was installed continuing" "$1";
+			fi;
+                else
+			printf "A manual %s instalation is requied to continue.\nAborting." "$1";
+			exit 1;
+	        fi;
+	else
+		printf "yout system is not supported by automatic install so you need install dependices by hand.\n"
+        fi;
+}
+
 printf "Configuring for compilation...\n"
 printf "Detecting libs:\n";
-
+sleep 1;
 printf "ifaddrs: "
 
 if [ -f "/usr/include/ifaddrs.h" ]; then 
@@ -81,6 +116,25 @@ if [ -f "/usr/include/regex.h" ]; then
 	OK_OUT;
 else
 	FAIL_OUT
+fi;
+
+printf "Initalizing search for compiler dependencies...\n"
+sleep 1
+printf "Detecting compiler g++ "
+
+if [ -f "/usr/bin/g++" ]; then
+	OK_OUT;
+else
+	FAIL_OUT;
+	os_detect "g++"
+fi;
+
+printf "Test"
+if [ -f "/usr/bin/clang" ]; then
+	OK_OUT;
+else
+	FAIL_OUT;
+	os_detect "clang";
 fi;
 
 printf "All depedencies are solved, please do a [%s%bmake%b] to compile the program.\n" "" "$GREEN" "$CLEAR";
