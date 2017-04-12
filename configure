@@ -40,10 +40,13 @@ function FAIL_OUT ()
 #Function to detect OS type and install depencies for it
 function os_detect ()
 {
-	os_type=`cat /etc/os-release | grep ID | cut -d'=' -f2`;
+	os_type=`cat /etc/os-release | grep "^ID" | cut -d'=' -f2`;
+	
+	# gentoo
         if [ "$os_type" == "gentoo" ]; then
-		printf "Its seem ur system dont have %s instaled, do you wanna install for you?[Yes/No]" "$1";
-	        read answer;
+		printf "Its seem ur system dont have %s instaled, do you wanna install for you?[Yes/No]" "$1";	   
+		read answer;
+
 		if [ "$answer" == "yes" ]; then
 	                emerge -v $1;
 			#exit if emerge has failed
@@ -56,6 +59,28 @@ function os_detect ()
 			printf "A manual %s instalation is requied to continue.\nAborting." "$1";
 			exit 1;
 	        fi;
+	else
+		printf "yout system is not supported by automatic install so you need install dependices by hand.\n"
+	fi;
+	
+	# debian 
+	if [ "$os_type" == "debian" ]; then
+		printf "Its seem ur system dont have %s instaled, do you wanna install for you?[Yes/No]" "$1";
+                read answer;
+
+                if [ "$answer" == "yes" ]; then
+                        apt-get install $1; 
+                        #exit if apt has failed
+                        if [ "$?" -gt "0" ]; then
+                                exit 1;
+                        else
+                                printf "the %d was installed continuing" "$1";
+                        fi;
+                else
+                        printf "A manual %s instalation is requied to continue.\nAborting." "$1";
+                        exit 1;
+                fi;
+
 	else
 		printf "yout system is not supported by automatic install so you need install dependices by hand.\n"
         fi;
@@ -129,12 +154,12 @@ else
 	os_detect "g++"
 fi;
 
-printf "Test"
-if [ -f "/usr/bin/clang" ]; then
+printf "gtk+3.0 dev"
+if [ -f "/usr/include/gtk/gtk.h" ]; then
 	OK_OUT;
 else
 	FAIL_OUT;
-	os_detect "clang";
+	os_detect "libgtk-3-dev";
 fi;
 
 printf "All depedencies are solved, please do a [%s%bmake%b] to compile the program.\n" "" "$GREEN" "$CLEAR";
