@@ -10,10 +10,14 @@
 CXX=g++
 
 CFLAGS=-g -std=c++11 -Wreturn-local-addr
-#CFLAGS=-g -Wreturn-local-addr
+CPPFLAGS=-D _GUI_ 
+
 LDFLAGS=-L 
+
 SOURCE=$(wildcard src/*.cpp)
+
 INCLUDES =$(wildcard include/*.h)
+
 MAIN=ipget
 
 #Store if user is root info
@@ -27,7 +31,7 @@ all:  $(MAIN)
 
 $(MAIN): $(SOURCE)
 	
-	$(CXX) $(CFLAGS) -o $(MAIN) $^
+	$(CXX) $(CFLAGS) $(CPPFLAGS) -o $(MAIN) $^
 
 static: $(SOURCE)
 
@@ -49,5 +53,3 @@ configure:
 	@echo Searching Dependences unsolved... 
 	@./configure
 	
-
-
