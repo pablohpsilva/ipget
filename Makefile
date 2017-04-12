@@ -9,15 +9,12 @@
 #Choose Compiler
 CXX=g++
 
+GTKFLAGS=-Wextra $(shell pkg-config --cflags --libs gtk+-3.0)
 CFLAGS=-g -std=c++11 -Wreturn-local-addr
 CPPFLAGS=-D _GUI_ 
-
 LDFLAGS=-L 
-
 SOURCE=$(wildcard src/*.cpp)
-
 INCLUDES =$(wildcard include/*.h)
-
 MAIN=ipget
 
 #Store if user is root info
@@ -31,7 +28,7 @@ all:  $(MAIN)
 
 $(MAIN): $(SOURCE)
 	
-	$(CXX) $(CFLAGS) $(CPPFLAGS) -o $(MAIN) $^
+	$(CXX) $(CFLAGS) $(GTKFLAGS) $(CPPFLAGS) -o $(MAIN) $^
 
 static: $(SOURCE)
 
