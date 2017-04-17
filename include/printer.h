@@ -120,5 +120,5 @@ class GUI : GetIP
 	 * -------------------------------------------------*/
 	void createFrame();
 	static void activate (GtkApplication *app, gpointer user_data);
-}
+};
 #endif

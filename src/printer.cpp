@@ -297,7 +297,7 @@ void GUI::createFrame()
 
 }
 
-void GUI::static void activate (GtkApplication *app, gpointer user_data)
+void GUI::activate (GtkApplication *app, gpointer user_data)
 {
 	GtkWidget *window;
 
