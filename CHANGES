@@ -6,6 +6,10 @@
 #
 ########################################################################
 
+Version 0.0.15
+Remove unnecessary files.
+Add some GTK functionality.
+Add some debug points
 
 Version 0.0.13
 Fixed segment fault in linux machines.
