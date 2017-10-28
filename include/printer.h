@@ -11,6 +11,11 @@
 #include <unistd.h>
 #include <regex>
 
+/* Get GTK headers */
+#if _GUI_
+   #include <gtk-3.0/gtk/gtk.h>
+#endif
+
 #define RCVBUFSIZE 1024
 
 
@@ -99,3 +104,21 @@ class PortCheck : GetIP
       
     
 };
+
+#if _GUI_
+
+class GUI : GetIP
+{
+	public:
+	/* Constructor with no Args, defaul is size/2 */
+	GUI();
+	~GUI();
+
+	/*---------------------------------------------------
+	 * Create Window frame with no options
+	 *
+	 * -------------------------------------------------*/
+	void createFrame();
+	static void activate (GtkApplication *app, gpointer user_data);
+};
+#endif

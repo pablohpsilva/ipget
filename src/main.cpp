@@ -33,14 +33,35 @@ int main (int argc, char* argv[])
 			return 0;
 
 		}
-		
-		if( std::string(argv[i]) == "-h") 
+		if( std::string(argv[i]) == "-h")
 		{
-		  char* host = argv[i+1];
-		  int port = std::stoi( argv[i+2]);
-		  p_check->CheckPort(host, port);
-		  return 0;
+			std::cout << "usage: ipget <option> <paramter>\n" 
+				     "				      \n"	
+				     "options:			      \n"
+				     "									\n"
+				     "-x				Retrive external IP from web.\n"
+				     "-X				Retrive Internal IP from web DNS.\n"
+				     "-V				Show program version.\n"
+				     "-h				Show this help.\n"
+				     "-p	[ip] [port]		Check the status of given port from given machine.\n\n";
+			return 0;
 		}
+
+		try
+		{	
+			if( std::string(argv[i]) == "-p") 
+			{
+			  char* host = argv[i+1];
+			  int port = std::stoi( argv[i+2]);
+			  p_check->CheckPort(host, port);
+			  return 0;
+			}
+		}
+		catch(std::exception& e)
+		{
+			std::cout<<"An error has occured.\nSee description: "<<e.what()<<std::endl;
+		}
+
 		    
 	
 	}
