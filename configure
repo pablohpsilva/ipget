@@ -40,6 +40,7 @@ function FAIL_OUT ()
 #Function to detect OS type and install depencies for it
 function os_detect ()
 {
+	print "Now we will try find your current linux distro..."
 	os_type=`cat /etc/os-release | grep "^ID" | cut -d'=' -f2`;
 	
 	# gentoo
@@ -84,6 +85,11 @@ function os_detect ()
 	else
 		printf "yout system is not supported by automatic install so you need install dependices by hand.\n"
         fi;
+
+	#ubuntu
+	if [ "$os_type" == "ubuntu" ]; then
+		print "It's seem your system don't have %s instaled,l do you wanna install it for you?[Yes/No]" "$1";
+	fi;
 }
 
 printf "Configuring for compilation...\n"
