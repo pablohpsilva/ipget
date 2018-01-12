@@ -9,9 +9,9 @@
 #Choose Compiler
 CXX=g++
 
-GTKFLAGS=-Wextra $(shell pkg-config --cflags --libs gtk+-3.0)
-CFLAGS=-g -std=c++11 -Wreturn-local-addr
-CPPFLAGS=-D _GUI_ 
+#GTKFLAGS=-Wextra $(shell pkg-config --cflags --libs gtk+-3.0)
+CFLAGS=-g -std=c++11 -Wreturn-local-addr -pthread
+CPPFLAGS= 
 LDFLAGS=-L 
 SOURCE=$(wildcard src/*.cpp)
 INCLUDES =$(wildcard include/*.h)
@@ -28,7 +28,7 @@ all:  $(MAIN)
 
 $(MAIN): $(SOURCE)
 	
-	$(CXX) $(CFLAGS) $(GTKFLAGS) $(CPPFLAGS) -o $(MAIN) $^
+	$(CXX) $(CFLAGS) $(CPPFLAGS) -o $(MAIN) $^
 
 static: $(SOURCE)
 
