@@ -1,6 +1,6 @@
 #include <iostream>
 #include <stdlib.h>  //for atoi
-
+#include <csignal>
 #include <sys/types.h>
 #include <sys/socket.h>
 #include <sys/ioctl.h>
@@ -101,7 +101,7 @@ class PortCheck : GetIP
   public:
 
       bool CheckPort(char* host, int port);
-      
+      bool CheckPortAsync(vector<string> hosts, vector<int> ports);
     
 };
 

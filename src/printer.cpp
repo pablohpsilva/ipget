@@ -284,6 +284,21 @@ bool PortCheck::CheckPort(char* host, int port)
    
 }
 
+bool PortCheck::CheckPortAsync(std::vector<std::string> hosts, std::vector<int> ports)
+{
+    //Iterate from vector Host and Ports.
+    for ( auto& host : hosts) 
+    {
+	std::cout << "This the list of Host from vectors Hosts: " << host;
+
+	for (auto& port : ports)
+        {
+		std::cout << "This is the port from vector ports: "<< port;
+		
+	}
+    }
+    
+}
 
 #if _GUI_
 /**

@@ -1,18 +1,28 @@
-# Ipget wrapper
-<p><b>Description:<p></b>
+# Internal ip wrapper API
+<p><b>Description<p></b>
 
-Small program to get all functionality from if(ifconfig etc) more external ip detection.
+Small program/API to get all functionality from if(ifconfig etc) more external ip detection.
 
-<p><b>Instruction<p></b>
+<p><b>Instruction to built<p></b>
 
-To compile program default type:
-make
+* To compile program default type:
+<p>make</p>
 
-To install type:
-make install
+* To install type:
+<p>make install</p>
 
-Search deps:
-make config
+* Search deps:
+<p>make config</p>
+
+<p><b>Usage</p></b>
+
+To list all the ip for all interfaces type:
+<p>ipget</p>
+
+To get external ip from web type:
+<p>ipget -X</p>
+
+
 
 <p><b>Bug Report<p></b>
 
