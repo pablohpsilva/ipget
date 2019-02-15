@@ -11,7 +11,7 @@ CXX=g++
 
 #GTKFLAGS=-Wextra $(shell pkg-config --cflags --libs gtk+-3.0)
 CFLAGS=-g -std=c++11 -Wreturn-local-addr -pthread
-CPPFLAGS= 
+CPPFLAGS= -DGTK
 LDFLAGS=-L 
 SOURCE=$(wildcard src/*.cpp)
 INCLUDES =$(wildcard include/*.h)
@@ -40,7 +40,7 @@ install:
 	if [ "$(shell whoami)" = "root" ]; then \
 		install -c -m 755  $(MAIN) /usr/bin; \
 	else \
-		sudo /usr/bin/install -c -m 755  $(MAIN) /usr/bin; \
+		sudo /usr/bin/install -c -m 755 $(MAIN) /usr/bin; \
 	fi;
 
 clean:
