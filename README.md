@@ -1,30 +1,31 @@
-# Internal ip wrapper API
-<p><b>Description<p></b>
+# Internal ip wrapper API - IPGET
+##Description
 
 Small program/API to get all functionality from if(ifconfig etc) more external ip detection.
 
-<p><b>Instruction to built<p></b>
+## Instructions 
+### Configuration
+To install the program, you need run the configure script. with command:
+```
+make configure
+```
+This will configure all deps and will tell to you with the system has the libs.
+### Compilation
+To compile the ipget you need run this command: 
+```
+make
+```
+now program will be compiled and give the executable.
+### Instalation
+To install ipget enter the follow command:
+```
+make install
+```
+Note: You must be root to install program in system. Otherwise program will just add path variable to your current env path.
 
-* To compile program default type:
-<p>make</p>
+## Documentation.
+The ipget documentation is inside docs folder. and is avaliable in <b> HTML </b> and <b> PDF </b>
 
-* To install type:
-<p>make install</p>
-
-* Search deps:
-<p>make config</p>
-
-<p><b>Usage</p></b>
-
-To list all the ip for all interfaces type:
-<p>ipget</p>
-
-To get external ip from web type:
-<p>ipget -X</p>
-
-
-
-<p><b>Bug Report<p></b>
-
-If you found any bug or error while using it, please record in http://mainstreamit.ddns.net/bugzilla. Thankyou.
+## Bug Report
+If you found any bug or error while using it, please send a email to puchiruzuki@gmail.com with all information about bug.
 

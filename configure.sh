@@ -160,6 +160,14 @@ else
 	os_detect "g++"
 fi;
 
+printf "sqlite3 dev"
+if [ -f "/usr/include/sqlite3.h" ]; then
+	OK_OUT;
+else
+	FAIL_OUT;
+	os_detect "libsqlite3-dev"
+fi;
+
 printf "gtk+3.0 dev"
 if [ -f "/usr/include/gtk/gtk.h" ]; then
 	OK_OUT;
@@ -167,5 +175,6 @@ else
 	FAIL_OUT;
 	os_detect "libgtk-3-dev";
 fi;
+
 
 printf "All depedencies are solved, please do a [%s%bmake%b] to compile the program.\n" "" "$GREEN" "$CLEAR";
