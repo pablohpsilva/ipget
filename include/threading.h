@@ -1,4 +1,5 @@
 #include <pthread.h>
+#include <future>
 #include <cstdarg>
 
 // TODO - Need refactor the class.
@@ -23,7 +24,12 @@ public:
       
       inline void RunThread(void* m)
       {
-	this->CreateThread(m, NULL);
+	      this->CreateThread(m, NULL);
+      }
+      template<typename T>
+      inline static std::future<T>MakeSharedFuture()
+      {
+
       }
       
       T RunAsAsync();

@@ -1,3 +1,16 @@
+/**
+ * @file ipget.hpp
+ * @author Jefferson Puchalski (puchiruzuki@gmail.com)
+ * @brief IpGet Main file.
+ * @version 0.1
+ * @date 2019-02-19
+ * 
+ * @copyright Copyright (c) 2019
+ * 
+ */
+
+#pragma once 
+
 #include <iostream>
 #include <stdlib.h> //for atoi
 #include <csignal>
@@ -10,6 +23,14 @@
 #include <ifaddrs.h>
 #include <unistd.h>
 #include <regex>
+#include <cstring>
+#include <algorithm>
+#include <stdlib.h>
+#include <exception>
+#include <errno.h>
+#include <memory>
+#include <string>
+#include "../include/SQLiteManager.hpp"
 
 #define RCVBUFSIZE 1024
 
@@ -57,6 +78,18 @@ public:
 		return std::regex_match(in, std::regex(regex));
 	}
 
+	/**
+	 * @brief Generate a Unique Ptr.
+	 * Generate a unique pointer from templated class.
+	 * @tparam T The class object to instanciate
+	 * @return std::unique_ptr<T> The smart pointer returned.
+	 */
+	template<typename T, typename... Args>
+	inline std::unique_ptr<T> generateUniquePtr(Args&&... args)
+	{
+		return std::unique_ptr<T>(new T(std::forward<Args>(args)...));
+	}
+
 	/*-------------------------------------------------------
 	*
 	* Write sring to file, to create a log file. 
@@ -88,11 +121,5 @@ public:
 	unsigned int requestLen;		 // Length of string to send
 	int bytesRcvd;							 // Bytes read in single recv()
 	bool status = true;
-};
-
-class PortCheck : GetIP
-{
-public:
-	bool CheckPort(char *host, int port);
-	bool CheckPortAsync(vector<string> hosts, vector<int> ports);
+	std::unique_ptr<SQLiteManager> sqlSmartPtr;			// POinter for Sql
 };

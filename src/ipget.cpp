@@ -1,18 +1,24 @@
-#include "../include/ipget.h"
-#include <cstring>
-#include <algorithm>
-#include <stdlib.h>
-#include <exception>
-#include <errno.h>
-#include <regex.h>
+#include "../include/ipget.hpp"
+
 
 using namespace std;
 
 GetIP::GetIP()
 {
+	if(!sqlSmartPtr.get())
+	{
+		sqlSmartPtr = this->generateUniquePtr<SQLiteManager>();
+	}
+	else
+	{
+		#if DEBUG
+			std::cout << "We have a valid pointer, dont need instanciated." << std::endl;
+		#endif
+	}
 }
 GetIP::~GetIP()
 {
+
 }
 
 void GetIP::GetInternalIP(char *InterfaceName)
@@ -66,6 +72,11 @@ void GetIP::GetInternalIP(char *InterfaceName)
 std::string GetIP::GetExternalIP()
 {
 
+	struct timeval timeout;
+    timeout.tv_sec = 20;
+    timeout.tv_usec = 10;
+
+    
 #if DEBUG
 	cout << "Receiving Data...." << endl;
 #endif
@@ -78,6 +89,9 @@ std::string GetIP::GetExternalIP()
 	// Safe create a usable stream ip with port
 	try
 	{
+		#if DEBUG
+			std::cout << "Creating socket!" << std::endl;
+		#endif
 		sockd = socket(PF_INET, SOCK_STREAM, IPPROTO_TCP);
 		if (sockd < 0)
 		{
@@ -89,6 +103,14 @@ std::string GetIP::GetExternalIP()
 	{
 		cout << "Error on opening a stream.." << endl;
 	}
+
+	// Enable socket timeout error
+	if (setsockopt (sockd, SOL_SOCKET, SO_RCVTIMEO, (char *)&timeout, sizeof(timeout)) < 0)
+        std::cout<< "setsockopt failed\n" << std::endl;
+
+    if (setsockopt (sockd, SOL_SOCKET, SO_SNDTIMEO, (char *)&timeout, sizeof(timeout)) < 0)
+		std::cout<<"setsockopt failed\n" << std::endl;
+
 	//fill buffer of servAddr
 	memset(&servAddr, 0, sizeof(servAddr));
 	//Set addr params
@@ -99,6 +121,9 @@ std::string GetIP::GetExternalIP()
 	//safe try to connect in our stream
 	try
 	{
+		#if DEBUG
+			std::cout << "Trying to estabilish a connection..." << std::endl;
+		#endif
 		//Get Connect sock
 		int retval = connect(sockd, (struct sockaddr *)&servAddr, sizeof(servAddr));
 		//Verify if connect has sucesffulll
@@ -110,11 +135,20 @@ std::string GetIP::GetExternalIP()
 		//Calculate s/ize of request
 		requestLen = strlen(request);
 		//Send pacted
-		int retval_send = send(sockd, request, requestLen, 0);
-		//Verify if package has data
-		if (retval_send != requestLen)
+		try
 		{
-			throw;
+			#if DEBUG
+				std::cout << "Starting sending request." << std::endl;
+			#endif
+			int retval_send = send(sockd, request, requestLen, 0);
+			if(retval_send != requestLen)
+			{
+				throw;
+			}
+		}
+		catch(std::exception& ex)
+		{
+			std::cout << "Exception Launched.\nError code: %s" << ex.what();
 		}
 		//Calculate data
 		bytesRcvd = recv(sockd, recvBuffer, sizeof(recvBuffer) - 1, 0);
@@ -145,9 +179,7 @@ std::string GetIP::GetExternalIP()
 		{
 			response.append(x);
 			cout << "EXTERNAL_IP = " << x << endl;
-
 		}
-
 //#endif
 
 //Set this fucntion to C++11 lower
@@ -175,6 +207,11 @@ std::string GetIP::GetExternalIP()
 	}
 	// Always close the socket and return result.
 	close(sockd);
+
+	//SQLiteManager* dbInstance = new SQLiteManager();
+	//std::string result = dbInstance->executeCmd<std::string>("SELECT * FROM IP_EXTERNAL", ECmdSelect::SELECT, nullptr);
+	//delete dbInstance;
+
 	return response;
 }
 
@@ -243,65 +280,6 @@ void GetIP::GetExternalIpByDns()
 	close(sockd);
 }
 
-/*************************************************
-*
-*	PortCheck Class definitions
-*
-*************************************************/
-
-bool PortCheck::CheckPort(char *host, int port)
-{
-	cout << "Trying to connect to host " << host << " with port: " << port << endl;
-
-	//Try create a sock stream to get pass tru selected port, init a buffer;
-	char *buffer;
-	buffer = new char[1024];
-	sockd = socket(PF_INET, SOCK_STREAM, IPPROTO_TCP);
-	// Error handling
-	if (sockd < 0)
-	{
-		cout << "Error o opening sock.\nError description: " << strerror(errno) << endl;
-		exit(EXIT_FAILURE);
-	}
-	//Allocate sockt addr for handling
-	memset(&servAddr, 0, sizeof(servAddr));
-	servAddr.sin_family = AF_INET;
-	servAddr.sin_addr.s_addr = inet_addr(host);
-	; //for any ip address
-	servAddr.sin_port = htons(port);
-
-	// try connect with socket adn srvAdd struct
-	if (connect(sockd, (const sockaddr *)&servAddr, sizeof(servAddr)) < 0)
-	{
-		if (errno == EADDRINUSE) //Treate error with errno
-		{
-			cout << "Port is already used, please try run ps aux | grep <port> to get more details";
-			exit(EXIT_FAILURE);
-		}
-		else
-		{
-			printf("could not bind to process (%d) %s\n", errno, strerror(errno));
-			return false;
-		}
-	}
-
-	cout << "Port " << port << " opened" << endl;
-	return true;
-}
-
-bool PortCheck::CheckPortAsync(std::vector<std::string> hosts, std::vector<int> ports)
-{
-	//Iterate from vector Host and Ports.
-	for (auto &host : hosts)
-	{
-		std::cout << "This the list of Host from vectors Hosts: " << host;
-
-		for (auto &port : ports)
-		{
-			std::cout << "This is the port from vector ports: " << port;
-		}
-	}
-}
 
 #if _GUI_
 /**

@@ -1,9 +1,9 @@
 ####################################################
 #  Make File for Printer_SRC and IpGet system      #
-#						   #
-#						   #
-#						   #
-#						   # 
+#						   						   #
+#						   						   #
+#						   						   #
+#						   						   # 
 ####################################################
 
 #Choose Compiler
@@ -11,7 +11,7 @@ CXX=g++
 
 #GTKFLAGS=-Wextra $(shell pkg-config --cflags --libs gtk+-3.0)
 CFLAGS=-g -std=c++11 -Wreturn-local-addr -pthread
-CPPFLAGS= -DGTK
+CPPFLAGS= -DGTK -DSQLITE -DDEBUG
 LDFLAGS=-L 
 SOURCE=$(wildcard src/*.cpp)
 INCLUDES =$(wildcard include/*.h)
@@ -28,7 +28,7 @@ all:  $(MAIN)
 
 $(MAIN): $(SOURCE)
 	
-	$(CXX) $(CFLAGS) $(CPPFLAGS) -o $(MAIN) $^
+	$(CXX) $(CFLAGS) $(CPPFLAGS) -o $(MAIN) $^ -lsqlite3
 
 static: $(SOURCE)
 
@@ -49,4 +49,3 @@ clean:
 configure:
 	@echo Searching Dependences unsolved... 
 	@./configure
-	

@@ -1,4 +1,4 @@
-#include "../include/ipget.h"
+#include "../include/ipget.hpp"
 #include <pthread.h>
 
 #define __PROGRAM__VERSION "This program was made by Mainstream IT and Software enginier.\nAnd is under GNU license.\nVersion = 1.0.0\n"
@@ -25,7 +25,7 @@ void *CallbackThread(void *args)
 	while (!isClosing)
 	{
 		#ifdef DEBUG
-			std::cout << "Getting signal\n";
+			std::cout << "Getting signal\r\n";
 		#endif
 		sleep(1);
 	}
