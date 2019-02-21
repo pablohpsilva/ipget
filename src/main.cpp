@@ -1,6 +1,8 @@
 #include "../include/ipget.hpp"
+#include "../include/threading.h"
 #include <pthread.h>
 
+// faustogoncalves.it
 #define __PROGRAM__VERSION "This program was made by Mainstream IT and Software enginier.\nAnd is under GNU license.\nVersion = 1.0.0\n"
 
 using namespace std;
@@ -33,9 +35,10 @@ void *CallbackThread(void *args)
 
 int main(int argc, char *argv[])
 {
+	//TODO - Change the new 
 	//Intanciate classes
-	std::unique_ptr<GetIP> ip(new GetIP());
-	std::unique_ptr<PortCheck> p_check(new PortCheck());
+	GetIP *ip = new GetIP();
+	PortCheck *p_check = new PortCheck();
 
 	//Run thread to get signal slot
 	pthread_t thread1;
@@ -74,20 +77,7 @@ int main(int argc, char *argv[])
 		}
 		if (std::string(argv[i]) == "-h")
 		{
-			std::cout << "usage: ipget <option> <parameter>\n"
-									 "				      \n"
-									 "options:			      \n"
-									 "									\n"
-									 "-x				Retrive external IP from web.\n"
-									 "-X				Retrive Internal IP from web DNS.\n"
-									 "-V				Show program version.\n"
-									 "-h				Show this help.\n"
-									 "-p	[ip] [port]		Check the status of given port from given machine.\n\n";
-			return 0;
-		}
-		if( std::string(argv[i]) == "--help")
-		{
-				std::cout << "usage: ipget <option> <paramter>\n"
+			std::cout << "usage: ipget <option> <paramter>\n"
 									 "				      \n"
 									 "options:			      \n"
 									 "									\n"
@@ -168,7 +158,6 @@ int main(int argc, char *argv[])
 								<< __LINE__ << std::endl;
 		}
 	}
-
 	ip->GetInternalIP("eth0");
 	
 	return 0;
