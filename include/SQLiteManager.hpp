@@ -8,6 +8,7 @@
  * @copyright Copyright (c) 2019 Jefferson Puchalski
  * 
  */
+#if SQLITE_ENABLE
 #pragma once
 
 #include <iostream>
@@ -20,10 +21,10 @@
  */
 enum class ECmdSelect : uint8_t
 {
-    SELECT,
-    UPDATE,
-    DELETE,
-    INSERT
+    SELECT = 0,
+    UPDATE = 1,
+    DELETE = 2,
+    INSERT = 3
 };
 
 /**
@@ -66,6 +67,8 @@ public:
      * @param ECmdCommand The enum for type of comand.
      */
     template<typename ArgT>
-    std::string executeCmd(ArgT Query, ECmdSelect SelectCmd, ArgT Args...);
-
+    void executeCmd(ArgT Query, ECmdSelect SelectCmd, int(* finishCb),ArgT Args...);
+    //Callback for sqllite
+    int didExecuteFinish(void* ctx, int NumberArgc, char** data, char** columName);
 };
+#endif

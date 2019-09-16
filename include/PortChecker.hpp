@@ -1,7 +1,8 @@
 #pragma once
 
 #include "ipget.hpp"
-
+#include <future>
+#include <iostream>
 class PortChecker : GetIP
 {
 public:

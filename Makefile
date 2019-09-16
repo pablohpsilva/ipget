@@ -1,9 +1,5 @@
 ####################################################
-#  Make File for Printer_SRC and IpGet system      #
-#						   						   #
-#						   						   #
-#						   						   #
-#						   						   # 
+#  Make File for Printer_SRC and IpGet system      # 
 ####################################################
 
 #Choose Compiler
@@ -12,7 +8,7 @@ CXX=g++
 #GTKFLAGS=-Wextra $(shell pkg-config --cflags --libs gtk+-3.0)
 CFLAGS=-g -std=c++11 -Wreturn-local-addr -pthread
 CPPFLAGS= -DGTK -DSQLITE -DDEBUG
-LDFLAGS=-L 
+LDFLAGS=-L  -lsqlite3
 SOURCE=$(wildcard src/*.cpp)
 INCLUDES =$(wildcard include/*.h)
 MAIN=ipget

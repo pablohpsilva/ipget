@@ -1,37 +1,33 @@
+#if SQLITE_ENABLE
 #include "../include/SQLiteManager.hpp"
-
 
 using namespace std;
 
 SQLiteManager::SQLiteManager()
 {
-    int rc = sqlite3_open("ipget.db", &instance);
-    if(rc)
+    // Try open db file
+    if(sqlite3_open("ipget.db", &instance))
     {
         fprintf(stderr,
          "Unable to open database\nError stacktrace: %s", 
          sqlite3_errmsg(instance)
         );
-    } else
-    {
-          fprintf(stdout, "Opened database successfully\n");
     }
+    fprintf(stdout, "Opened database successfully\n");
 }
 
 SQLiteManager::~SQLiteManager()
 {
-    int rc = sqlite3_close(instance);   // This close the sqlite3.
-    if(rc)
+    // This close the sqlite3.
+    if(sqlite3_close(instance))
     {
         fprintf(stderr,
          "Unable to close database\nError stacktrace: %s", 
          sqlite3_errmsg(instance)
         );
     } 
-    else
-    {
-        fprintf(stdout, "Closed database successfully\n");
-    }
+    fprintf(stdout, "Closed database successfully\n");
+    
 }
 
 // Create a datatable.
@@ -48,7 +44,7 @@ bool SQLiteManager::CreateTable(std::string Name, std::string Query)
 }
 
 template<typename ArgT>
-std::string SQLiteManager::executeCmd(ArgT Query,ECmdSelect SelectCmd, ArgT Args...)
+void SQLiteManager::executeCmd(ArgT Query,ECmdSelect SelectCmd, int(* finishCb),ArgT Args...)
 {
     char* sQuery;
     // Get type and convert the generic string to right type.
@@ -56,17 +52,13 @@ std::string SQLiteManager::executeCmd(ArgT Query,ECmdSelect SelectCmd, ArgT Args
         char* sQuery = Query.c_str();
     else
         char* sQuery = Query;
+    
+    char** errMsg;
         
     switch (SelectCmd)
     {
         case ECmdSelect::SELECT:
-            sqlite3_exec(this->instance, sQuery, [](void* ctx, int NumberArgc, char** data, char** columName){
-                std::cout << "The query was executed" << std::endl;
-                return std::string(data);
-            }, [](char** errMsg){
-                fprintf(stderr, "An error has occured: %s", errMsg);
-            });
-            break;
+            sqlite3_exec(this->instance, sQuery, finishCb, errMsg); 
 
         case ECmdSelect::INSERT:
             break;
@@ -82,4 +74,4 @@ std::string SQLiteManager::executeCmd(ArgT Query,ECmdSelect SelectCmd, ArgT Args
             break;
     }
 }
-
+#endif

@@ -5,7 +5,8 @@
 *************************************************/
 #include "../include/PortChecker.hpp"
 
-bool PortCheck::CheckPort(char *host, int port)
+
+bool PortChecker::CheckPort(char *host, int port)
 {
 	cout << "Trying to connect to host " << host << " with port: " << port << endl;
 
@@ -45,8 +46,10 @@ bool PortCheck::CheckPort(char *host, int port)
 	return true;
 }
 
-bool PortCheck::CheckPortAsync(std::vector<std::string> hosts, std::vector<int> ports)
+bool PortChecker::CheckPortAsync(std::vector<std::string> hosts, std::vector<int> ports)
 {
+	std::function<bool(PortChecker&, char*, int)> fn = &PortChecker::CheckPort;
+
 	//Iterate from vector Host and Ports.
 	for (auto &host : hosts)
 	{
@@ -54,6 +57,7 @@ bool PortCheck::CheckPortAsync(std::vector<std::string> hosts, std::vector<int> 
 
 		for (auto &port : ports)
 		{
+			std::future<bool> fn = std::async(std::launch::async, fn, host.data(), port );
 			std::cout << "This is the port from vector ports: " << port;
 		}
 	}

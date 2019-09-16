@@ -30,6 +30,7 @@
 #include <errno.h>
 #include <memory>
 #include <string>
+#include <stdio.h>
 #include "../include/SQLiteManager.hpp"
 
 #define RCVBUFSIZE 1024
@@ -120,6 +121,8 @@ public:
 	char recvBuffer[RCVBUFSIZE]; // Buffer for response string
 	unsigned int requestLen;		 // Length of string to send
 	int bytesRcvd;							 // Bytes read in single recv()
-	bool status = true;
+	bool status;
+	#if SQLITE_ENABLE
 	std::unique_ptr<SQLiteManager> sqlSmartPtr;			// POinter for Sql
+	#endif
 };

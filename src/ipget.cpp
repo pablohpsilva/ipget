@@ -5,6 +5,7 @@ using namespace std;
 
 GetIP::GetIP()
 {
+	#if SQLITE_ENABLE
 	if(!sqlSmartPtr.get())
 	{
 		sqlSmartPtr = this->generateUniquePtr<SQLiteManager>();
@@ -15,6 +16,7 @@ GetIP::GetIP()
 			std::cout << "We have a valid pointer, dont need instanciated." << std::endl;
 		#endif
 	}
+	#endif
 }
 GetIP::~GetIP()
 {
@@ -41,16 +43,29 @@ void GetIP::GetInternalIP(char *InterfaceName)
 		// check if has valid args, and if iface is a valid AF_INET provide info about it
 		if (ifa->ifa_addr == NULL)
 		{
+			// Show in verbose mode.
+			#if VERBOSE
 			cout << "Interface " << ifa->ifa_name << " with no ip address value. " << endl;
+			#endif
 			continue;
 		}
-
-		//		if (ifa->ifa_addr->sa_family != AF_INET) { cout << "Interface " << ifa->ifa_name << " has no valid IPV4 address." << endl; continue; }
-
-		//		if ((ifa->ifa_flags & IFF_UP) == 0) { cout << "Interface " << ifa->ifa_name << " is not present." << endl; continue; }
-
-		//		if (ifa->ifa_flags & IFF_POINTOPOINT) {	cout << "Interface " << ifa->ifa_name << " is not a point to point." << endl; continue; }
-
+		else if (ifa->ifa_addr->sa_family != AF_INET)
+		{
+			#if VERBOSE
+			cout << "Interface " << ifa->ifa_name << " has no valid IPV4 address." << endl;
+			#endif
+			continue; 
+		} 
+		else if ((ifa->ifa_flags & IFF_UP) == 0)
+		{ 
+			#if VERBOSE
+			cout << "Interface " << ifa->ifa_name << " is not present." << endl;
+			#endif
+			continue; 
+		}
+		//if (ifa->ifa_flags & IFF_POINTOPOINT) {	cout << "Interface " << ifa->ifa_name << " is not a point to point." << endl; continue; }
+		
+		// Process AF_INET 
 		if (ifa->ifa_addr->sa_family == AF_INET)
 		{
 			//Revice Memory adress from addr
@@ -64,19 +79,18 @@ void GetIP::GetInternalIP(char *InterfaceName)
 			std::cout << "INTERFACE " << ifname << " = " << addressBuffer << endl;
 		}
 	}
-
+	// Free ifAdress struct pointer
 	if (ifAddrStruct != NULL)
 		freeifaddrs(ifAddrStruct);
 }
 
 std::string GetIP::GetExternalIP()
 {
-
+	// Add timeout for request
 	struct timeval timeout;
     timeout.tv_sec = 20;
     timeout.tv_usec = 10;
 
-    
 #if DEBUG
 	cout << "Receiving Data...." << endl;
 #endif
@@ -187,7 +201,7 @@ std::string GetIP::GetExternalIP()
 		//formate output
 		char end[250];
 		char _retval[18];
-		//Copy midle buffer in index
+		//Copy middle buffer in index
 		copy(recvBuffer + 210, recvBuffer + 228, end);
 		//format string
 		end[16] = '\0';
@@ -207,7 +221,8 @@ std::string GetIP::GetExternalIP()
 	}
 	// Always close the socket and return result.
 	close(sockd);
-
+	
+	// TODO: add values to DB for report.
 	//SQLiteManager* dbInstance = new SQLiteManager();
 	//std::string result = dbInstance->executeCmd<std::string>("SELECT * FROM IP_EXTERNAL", ECmdSelect::SELECT, nullptr);
 	//delete dbInstance;
@@ -242,35 +257,29 @@ void GetIP::GetExternalIpByDns()
 
 	try
 	{
-		//connect ( sockd, (struct sockaddr*) &servAddr, sizeof(servAddr));
-		//Get erro  buffer
-		char *errobuf = new char[256];
-
+		// Try connect to socket, if have error show in console.
 		connect(sockd, (const sockaddr *)&servAddr, sizeof(servAddr));
-		char *error_val = strerror_r(errno, errobuf, 256); // Get Error no
-
 		if (errno > 0)
 		{
-			cout << "Error:\n"
-				 << error_val << endl;
+			std::cerr << "ERROR - While is tring socket connection." << std::endl << "Error codes: " << errno; // print error
 			exit(EXIT_FAILURE);
 		}
 		cout << "Connected.\nGetting IP external..." << endl;
-
+		// Create socket addrin and socket lenght for get value .
 		sockaddr_in servAddr2;
 		socklen_t servAddrlen2 = sizeof(servAddr2);
-
+		//Get information from socket given name.
 		getsockname(sockd, (sockaddr *)&servAddr2, &servAddrlen2);
-		error_val = strerror_r(errno, errobuf, 256);
-
 		size_t bufflen = sizeof(buffer);
-
 		const char *retval = inet_ntop(AF_INET, &servAddr2.sin_addr, buffer, bufflen);
+		// if we dont have a retval, throw a error
 		if (retval == 0)
-			error_val = strerror_r(errno, errobuf, 256);
-
+		{
+			std::cerr << "ERROR - While is tring socket connection." << \
+			std::endl << "Error codes: " << errno; // print error
+		}
 		cout << "IP_EXTERNAL = " << retval << endl;
-		delete errobuf;
+		
 	}
 	catch (exception &e)
 	{

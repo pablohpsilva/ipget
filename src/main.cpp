@@ -1,5 +1,6 @@
 #include "../include/ipget.hpp"
 #include "../include/threading.h"
+#include "../include/PortChecker.hpp"
 #include <pthread.h>
 
 // faustogoncalves.it
@@ -27,7 +28,7 @@ void *CallbackThread(void *args)
 	while (!isClosing)
 	{
 		#ifdef DEBUG
-			std::cout << "Getting signal\r\n";
+			//std::cout << "Getting signal\r\n";
 		#endif
 		sleep(1);
 	}
@@ -38,8 +39,11 @@ int main(int argc, char *argv[])
 	//TODO - Change the new 
 	//Intanciate classes
 	GetIP *ip = new GetIP();
-	PortCheck *p_check = new PortCheck();
-
+	#if __cplusplus <= 201103L
+		std::unique_ptr<PortChecker> m_portCheck = ip->generateUniquePtr<PortChecker>();
+	#elif __cplusplus >= 201103L
+		auto m_portCheck = ip->generateUniquePtr<PortChecker>();
+	#endif
 	//Run thread to get signal slot
 	pthread_t thread1;
 	int intresp = pthread_create(&thread1, NULL, CallbackThread, NULL);
@@ -95,8 +99,16 @@ int main(int argc, char *argv[])
 			{
 				char *host = argv[i + 1];
 				int port = std::stoi(argv[i + 2]);
-				p_check->CheckPort(host, port);
-				return 0;
+				if(m_portCheck)
+				{
+					m_portCheck->CheckPort(host, port);
+					return 0;
+				}
+				else
+				{
+					throw "An internal error has occured!";
+					return 1;
+				}
 			}
 		}
 		catch (std::exception &e)
