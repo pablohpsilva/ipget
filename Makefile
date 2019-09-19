@@ -3,10 +3,10 @@
 ####################################################
 
 #Choose Compiler
-CXX=g++
+CXX=c++
 
 #GTKFLAGS=-Wextra $(shell pkg-config --cflags --libs gtk+-3.0)
-CFLAGS=-g -std=c++11 -Wreturn-local-addr -pthread
+CFLAGS=-g -std=c++11 -stdlib=libc++ -Wreturn-local-addr -pthread
 CPPFLAGS= -DGTK -DSQLITE -DDEBUG
 LDFLAGS=-L  -lsqlite3
 SOURCE=$(wildcard src/*.cpp)
