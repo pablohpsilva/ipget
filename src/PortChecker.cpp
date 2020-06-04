@@ -9,7 +9,7 @@
 
 using namespace std;
 
-bool PortChecker::CheckPort(char *host, int port)
+bool PortChecker::CheckPort(const string &host, int port)
 {
 	cout << "Trying to connect to host " << host << " with port: " << port << endl;
 
@@ -26,7 +26,7 @@ bool PortChecker::CheckPort(char *host, int port)
 	//Allocate sockt addr for handling
 	memset(&servAddr, 0, sizeof(servAddr));
 	servAddr.sin_family = AF_INET;
-	servAddr.sin_addr.s_addr = inet_addr(host);
+	servAddr.sin_addr.s_addr = inet_addr(host.c_str());
 	; //for any ip address
 	servAddr.sin_port = htons(port);
 
@@ -53,14 +53,6 @@ bool PortChecker::CheckPortAsync(std::vector<std::string> hosts, std::vector<int
 {
 	
 	//Iterate from vector Host and Ports.
-	for (auto &host : hosts)
-	{
-		std::cout << "This the list of Host from vectors Hosts: " << host;
-
-		for (auto &port : ports)
-		{
-			std::future<bool> fn = std::async(std::launch::async,[&](){this->CheckPort(host.data(), port);}, host.data(), port);
-			std::cout << "This is the port from vector ports: " << port;
-		}
-	}
+	//TODO: Check if all ports are opened.
+    return  false;
 }

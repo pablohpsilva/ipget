@@ -1,42 +1,38 @@
-#include "../include/ipget.hpp"
-#include "../include/threading.h"
-#include "../include/PortChecker.hpp"
+#include <ipget.hpp>
+#include <PortChecker.hpp>
 #include <pthread.h>
 
-// faustogoncalves.it
 #define __PROGRAM__VERSION "This program was made by Mainstream IT and Software enginier.\nAnd is under GNU license.\nVersion = 1.0.0\n"
 
 using namespace std;
 
 bool isClosing = false;
 
-void getSignalSlot(int signalnum)
+void getSignalSlot(int signalnum )
 {
-	cout << "Interrupt signal (" << signalnum << ") received.\n";
+	 cout << "Interrupt signal (" << signalnum << ") received.\n";
 
-	// cleanup and close up stuff here
-	// terminate program
-
-	exit(signalnum);
+	 // cleanup and close up stuff here  
+         // terminate program  
+	 	  
+         exit(signalnum); 
 }
 
-void *CallbackThread(void *args)
+void *CallbackThread(void* args)
 {
 
-	signal(SIGINT, getSignalSlot);
-
-	while (!isClosing)
+    signal(SIGINT, getSignalSlot);
+	while(!isClosing)
 	{
-		#ifdef DEBUG
-			//std::cout << "Getting signal\r\n";
-		#endif
-		sleep(1);
+	    std::cout << "Getting signal\n";
+	    sleep(1);
 	}
+    return nullptr;
 }
 
 int main(int argc, char *argv[])
 {
-	//TODO - Change the new 
+	//TODO - Change the new
 	//Intanciate classes
 	GetIP *ip = new GetIP();
 	#if __cplusplus <= 201103L
@@ -171,6 +167,6 @@ int main(int argc, char *argv[])
 		}
 	}
 	ip->GetInternalIP("eth0");
-	
+
 	return 0;
 }

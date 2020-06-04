@@ -33,7 +33,7 @@
 #include <stdio.h>
 #include "../include/SQLiteManager.hpp"
 
-#define RCVBUFSIZE 1024
+#define RECEIVED_BUFFER_SIZE 1024
 
 //-----------------------------
 // Warning we just can continue with
@@ -80,7 +80,7 @@ public:
 	}
 
 	/**
-	 * @brief Generate a Unique Ptr.
+	 * @brief Generate a Unique Ptr moving Vargs.
 	 * Generate a unique pointer from templated class.
 	 * @tparam T The class object to instanciate
 	 * @return std::unique_ptr<T> The smart pointer returned.
@@ -118,7 +118,7 @@ public:
 	unsigned short servPort;
 	char const *servIP;					 // Server IP address (dotted quad)
 	char const *request;				 // String to send to server
-	char recvBuffer[RCVBUFSIZE]; // Buffer for response string
+	char recvBuffer[RECEIVED_BUFFER_SIZE]; // Buffer for response string
 	unsigned int requestLen;		 // Length of string to send
 	int bytesRcvd;							 // Bytes read in single recv()
 	bool status;
