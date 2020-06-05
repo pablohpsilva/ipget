@@ -93,7 +93,7 @@ int main(int argc, char *argv[])
 		{
 			if (std::string(argv[i]) == "-p")
 			{
-				char *host = argv[i + 1];
+				std::string host = argv[i + 1];
 				int port = std::stoi(argv[i + 2]);
 				if(m_portCheck)
 				{
@@ -166,6 +166,7 @@ int main(int argc, char *argv[])
 								<< __LINE__ << std::endl;
 		}
 	}
+	//
 	ip->GetInternalIP("eth0");
 
 	return 0;
