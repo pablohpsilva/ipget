@@ -1,18 +1,14 @@
 ####################################################
-#  Make File for Printer_SRC and IpGet system      #
-#						   #
-#						   #
-#						   #
-#						   # 
+#  Make File for Printer_SRC and IpGet system      # 
 ####################################################
 
 #Choose Compiler
-CXX=g++
+CXX=c++
 
 #GTKFLAGS=-Wextra $(shell pkg-config --cflags --libs gtk+-3.0)
-CFLAGS=-g -std=c++11 -Wreturn-local-addr -pthread
-CPPFLAGS= 
-LDFLAGS=-L 
+CFLAGS=-g -std=c++11 -stdlib=libc++ -Wreturn-local-addr -pthread
+CPPFLAGS= -DGTK -DSQLITE -DDEBUG
+LDFLAGS=-L  -lsqlite3
 SOURCE=$(wildcard src/*.cpp)
 INCLUDES =$(wildcard include/*.h)
 MAIN=ipget
@@ -28,7 +24,7 @@ all:  $(MAIN)
 
 $(MAIN): $(SOURCE)
 	
-	$(CXX) $(CFLAGS) $(CPPFLAGS) -o $(MAIN) $^
+	$(CXX) $(CFLAGS) $(CPPFLAGS) -o $(MAIN) $^ -lsqlite3
 
 static: $(SOURCE)
 
@@ -40,7 +36,7 @@ install:
 	if [ "$(shell whoami)" = "root" ]; then \
 		install -c -m 755  $(MAIN) /usr/bin; \
 	else \
-		sudo /usr/bin/install -c -m 755  $(MAIN) /usr/bin; \
+		sudo /usr/bin/install -c -m 755 $(MAIN) /usr/bin; \
 	fi;
 
 clean:
@@ -49,4 +45,3 @@ clean:
 configure:
 	@echo Searching Dependences unsolved... 
 	@./configure
-	
